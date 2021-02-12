@@ -24,6 +24,11 @@ class Subject
      */
     private $pOSTs;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $user;
+
     public function __construct()
     {
         $this->pOSTs = new ArrayCollection();
@@ -60,6 +65,18 @@ class Subject
                 $pOST->setSubject(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?string
+    {
+        return $this->user;
+    }
+
+    public function setUser(string $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

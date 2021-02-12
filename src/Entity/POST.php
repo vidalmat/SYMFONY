@@ -22,10 +22,7 @@ class POST
      */
     private $content;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $author;
+    
 
     /**
      * @ORM\Column(type="datetime")
@@ -37,6 +34,12 @@ class POST
      * @ORM\JoinColumn(nullable=false)
      */
     private $subject;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="pOSTs")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
 
     public function getId(): ?int
     {
@@ -51,18 +54,6 @@ class POST
     public function setContent(string $content): self
     {
         $this->content = $content;
-
-        return $this;
-    }
-
-    public function getAuthor(): ?string
-    {
-        return $this->author;
-    }
-
-    public function setAuthor(string $author): self
-    {
-        $this->author = $author;
 
         return $this;
     }
@@ -87,6 +78,18 @@ class POST
     public function setSubject(?Subject $subject): self
     {
         $this->subject = $subject;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
