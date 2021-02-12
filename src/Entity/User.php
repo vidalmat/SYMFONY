@@ -39,16 +39,32 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=100)
      */
-    private $username;
+    private $pseudo;
 
     /**
-     * @ORM\OneToMany(targetEntity=POST::class, mappedBy="user")
+     * @ORM\Column(type="string", length=100)
      */
-    private $pOSTs;
+    private $name;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $address;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Post::class, mappedBy="user")
+     */
+    private $posts;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Subject::class, mappedBy="user")
+     */
+    private $subjects;
 
     public function __construct()
     {
-        $this->pOSTs = new ArrayCollection();
+        $this->posts = new ArrayCollection();
+        $this->subjects = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -76,18 +92,6 @@ class User implements UserInterface
     public function getUsername(): string
     {
         return (string) $this->email;
-    }
-
-    public function getPseudo(): string
-    {
-        return (string) $this->pseudo;
-    }
-
-    public function setPseudo(string $pseudo): self
-    {
-        $this->pseudo = $pseudo;
-
-        return $this;
     }
 
     /**
@@ -144,35 +148,99 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    /**
-     * @return Collection|POST[]
-     */
-    public function getPOSTs(): Collection
+    public function getName(): ?string
     {
-        return $this->pOSTs;
+        return $this->name;
     }
 
-    public function addPOST(POST $pOST): self
+    public function setName(string $name): self
     {
-        if (!$this->pOSTs->contains($pOST)) {
-            $this->pOSTs[] = $pOST;
-            $pOST->setUser($this);
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(string $address): self
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    public function getPseudo(): ?string
+    {
+        return $this->pseudo;
+    }
+
+    public function setPseudo(string $pseudo): self
+    {
+        $this->pseudo = $pseudo;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Post[]
+     */
+    public function getPosts(): Collection
+    {
+        return $this->posts;
+    }
+
+    public function addPost(Post $post): self
+    {
+        if (!$this->posts->contains($post)) {
+            $this->posts[] = $post;
+            $post->setUser($this);
         }
 
         return $this;
     }
 
-    public function removePOST(POST $pOST): self
+    public function removePost(Post $post): self
     {
-        if ($this->pOSTs->removeElement($pOST)) {
+        if ($this->posts->removeElement($post)) {
             // set the owning side to null (unless already changed)
-            if ($pOST->getUser() === $this) {
-                $pOST->setUser(null);
+            if ($post->getUser() === $this) {
+                $post->setUser(null);
             }
         }
 
         return $this;
     }
 
-   
+    /**
+     * @return Collection|Subject[]
+     */
+    public function getSubjects(): Collection
+    {
+        return $this->subjects;
+    }
+
+    public function addSubject(Subject $subject): self
+    {
+        if (!$this->subjects->contains($subject)) {
+            $this->subjects[] = $subject;
+            $subject->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubject(Subject $subject): self
+    {
+        if ($this->subjects->removeElement($subject)) {
+            // set the owning side to null (unless already changed)
+            if ($subject->getUser() === $this) {
+                $subject->setUser(null);
+            }
+        }
+
+        return $this;
+    }
 }

@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\POSTRepository;
+use App\Repository\PostRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=POSTRepository::class)
+ * @ORM\Entity(repositoryClass=PostRepository::class)
  */
-class POST
+class Post
 {
     /**
      * @ORM\Id
@@ -22,7 +22,6 @@ class POST
      */
     private $content;
 
-    
 
     /**
      * @ORM\Column(type="datetime")
@@ -30,13 +29,13 @@ class POST
     private $postedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Subject::class, inversedBy="pOSTs")
+     * @ORM\ManyToOne(targetEntity=Subject::class, inversedBy="posts")
      * @ORM\JoinColumn(nullable=false)
      */
     private $subject;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="pOSTs")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="posts")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;

@@ -20,18 +20,29 @@ class Subject
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity=POST::class, mappedBy="subject", orphanRemoval=true)
+     * @ORM\Column(type="string", length=255)
      */
-    private $pOSTs;
+    private $description;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Post::class, mappedBy="subject", orphanRemoval=true)
+     */
+    private $posts;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="subjects")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $user;
 
     public function __construct()
     {
-        $this->pOSTs = new ArrayCollection();
+        $this->posts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -39,48 +50,69 @@ class Subject
         return $this->id;
     }
 
-    /**
-     * @return Collection|POST[]
-     */
-    public function getPOSTs(): Collection
+    public function getDescription(): ?string
     {
-        return $this->pOSTs;
+        return $this->description;
     }
 
-    public function addPOST(POST $pOST): self
+    public function setDescription(string $description): self
     {
-        if (!$this->pOSTs->contains($pOST)) {
-            $this->pOSTs[] = $pOST;
-            $pOST->setSubject($this);
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Post[]
+     */
+    public function getPosts(): Collection
+    {
+        return $this->posts;
+    }
+
+    public function addPost(Post $post): self
+    {
+        if (!$this->posts->contains($post)) {
+            $this->posts[] = $post;
+            $post->setSubject($this);
         }
 
         return $this;
     }
 
-    public function removePOST(POST $pOST): self
+    public function removePost(Post $post): self
     {
-        if ($this->pOSTs->removeElement($pOST)) {
+        if ($this->posts->removeElement($post)) {
             // set the owning side to null (unless already changed)
-            if ($pOST->getSubject() === $this) {
-                $pOST->setSubject(null);
+            if ($post->getSubject() === $this) {
+                $post->setSubject(null);
             }
         }
 
         return $this;
     }
 
-    public function getUser(): ?string
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUser(string $user): self
+    public function setUser(?User $user): self
     {
         $this->user = $user;
 
         return $this;
     }
-
-
-    
 }
